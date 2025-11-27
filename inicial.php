@@ -1,30 +1,23 @@
 <?php
-session_start(); // 1. INICIA A SESSÃO
+session_start();
 include("conexao.php");
 
-// --- LÓGICA DO CARRINHO NO HEADER ---
 $total_itens_carrinho = 0;
 if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) {
     $total_itens_carrinho = array_sum($_SESSION['carrinho']);
 }
 
-// Variáveis de controle de acesso
 $isAdmin = isset($_SESSION['adm']) && $_SESSION['adm'] == 1;
 $estaLogado = isset($_SESSION['id_usuario']);
 
-// Função para renderizar os cards
 function renderProduto($row)
 {
-    global $isAdmin, $estaLogado; // Permite usar as variáveis globais dentro da função
+    global $isAdmin, $estaLogado;
 
-    // Tratamento para imagem vazia
     $imagem = !empty($row['img']) ? "./img/" . htmlspecialchars($row['img']) : "https://via.placeholder.com/280x200?text=Sem+Imagem";
 
     echo '<article class="carrossel-item">';
 
-    // LINK DA IMAGEM: 
-    // Admin -> Vai para Editar
-    // Cliente/Visitante -> Vai para Detalhes (prod.php)
     $link = $isAdmin ? 'editar.php?id=' . $row['id_prod'] : 'prod.php?id=' . $row['id_prod'];
 
     echo '<a href="' . $link . '" class="produto-link">';
@@ -34,14 +27,11 @@ function renderProduto($row)
     echo '<div class="product-price"><span>R$ ' . number_format($row['preco'], 2, ',', '.') . '</span></div>';
     echo '</a>';
 
-    // --- BOTÕES DE AÇÃO ---
     echo '<div class="mt-3">';
 
     if ($isAdmin) {
-        // BOTÃO PARA ADMIN: Editar
         echo '<a href="editar.php?id=' . $row['id_prod'] . '" class="btn btn-warning btn-sm w-100 fw-bold">Editar Produto</a>';
     } elseif ($estaLogado) {
-        // BOTÃO PARA CLIENTE LOGADO: Adicionar ao Carrinho
         echo '<form action="gerenciar_carrinho.php" method="POST" style="margin:0;">
                 <input type="hidden" name="id_prod" value="' . $row['id_prod'] . '">
                 <input type="hidden" name="acao" value="adicionar">
@@ -50,7 +40,6 @@ function renderProduto($row)
                 </button>
               </form>';
     } else {
-        // BOTÃO PARA VISITANTE: Manda logar
         echo '<a href="login.php" class="btn btn-outline-secondary btn-sm w-100 fw-bold">
                 <i class="fas fa-lock"></i> Comprar
               </a>';
@@ -86,9 +75,10 @@ function renderProduto($row)
             background-color: #121212;
             color: var(--text-color);
             scroll-behavior: smooth;
+            transition: background-color 0.3s, color 0.3s;
+            /* Transição suave para o tema */
         }
 
-        /* Header Styles */
         .main-header {
             background-color: var(--primary-color);
             padding: 1rem 0;
@@ -110,7 +100,6 @@ function renderProduto($row)
             color: #cff4fc;
         }
 
-        /* --- NAV LINKS --- */
         .nav-link-custom {
             color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
@@ -308,6 +297,130 @@ function renderProduto($row)
         .footer-link:hover {
             color: white;
         }
+
+        .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+
+        .social-icons a:hover {
+            color: #0246adff;
+            transition: color 0.3s ease;
+        }
+
+        /* --- ADMIN MENU ORIGINAL --- */
+        .admin-menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-dropdown-content {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.4s ease, visibility 0.3s;
+            position: absolute;
+            background-color: #1a1a1aff;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            right: 0;
+            top: 30px;
+            border-radius: 5px;
+        }
+
+        .admin-dropdown-content a {
+            color: #ff7300;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .admin-dropdown-content a:hover {
+            background-color: #181818ff;
+            border-radius: 5px;
+        }
+
+        .admin-dropdown-content.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* ==================================================================
+           NOVO CSS DE ACESSIBILIDADE (Adicionado sem mexer no original)
+           ================================================================== */
+        /* Menu Flutuante */
+        .accessibility-menu {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid #444;
+        }
+
+        .accessibility-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Sobrescrita para MODO CLARO (Light Mode) */
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #000;
+        }
+
+        body.light-mode .card-admin,
+        body.light-mode .carrossel-item {
+            background-color: #fff;
+            border-color: #ccc;
+            color: #000;
+        }
+
+        body.light-mode .product-name,
+        body.light-mode h2,
+        body.light-mode h3,
+        body.light-mode .text-white {
+            color: #000 !important;
+        }
+
+        body.light-mode .nav-link-custom {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        body.light-mode .nav-link-custom:hover {
+            color: #000;
+        }
+
+        body.light-mode .admin-dropdown-content {
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+
+        body.light-mode .admin-dropdown-content a:hover {
+            background-color: #eee;
+        }
     </style>
 </head>
 
@@ -336,7 +449,7 @@ function renderProduto($row)
                 <?php if ($estaLogado): ?>
                     <div class="text-end d-none d-md-block" style="line-height: 1.2;">
                         <span class="text-white d-block" style="font-weight: 500;">
-                            Olá, <?php echo htmlspecialchars($_SESSION['nome']); ?>
+                            Olá, <?php echo htmlspecialchars($_SESSION['login']); ?>
                         </span>
                         <small class="text-white-50" style="font-size: 0.8rem;">
                             <?php echo $isAdmin ? 'Administrador' : 'Cliente'; ?>
@@ -345,6 +458,25 @@ function renderProduto($row)
                     <a href="logout.php" class="text-white fs-5 ms-2" title="Sair">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
+
+                    <div class="admin-menu-container">
+                        <a href="#" id="admin-menu-button" aria-label="Configurações" title="Configurações">
+                            <i class="fas fa-cog"></i>
+                        </a>
+                        <div id="admin-menu-dropdown" class="admin-dropdown-content">
+                            <?php if ($isAdmin) : ?>
+                                <a href="sistema.php">Gerenciar Cadastros</a>
+                                <a href="log.php">Tela log</a>
+                                <a href="painel.php">Dashboard (Relatório)</a>
+                            <?php endif; ?>
+
+                            <a href="telabd.php">Modelo BD</a>
+
+                            <?php if (!$isAdmin) : ?>
+                                <a onclick="abrirAlterarSenha()" style="cursor:pointer;">Alterar Senha</a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
 
                 <?php else: ?>
                     <a href="login.php" class="btn btn-outline-light btn-sm fw-bold ms-3">
@@ -518,9 +650,23 @@ function renderProduto($row)
                     <h4>Sistema</h4>
                     <p>&copy; 2025 Gygabite Shop Dev Team</p>
                 </div>
+                <div class="footer-section">
+                    <h4>Siga-nos</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/romulo1st/"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
+
+    <div class="accessibility-menu">
+        <button id="toggle-theme" class="accessibility-btn">🌓 Tema</button>
+        <button id="increase-font" class="accessibility-btn">A+</button>
+        <button id="decrease-font" class="accessibility-btn">A-</button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -533,6 +679,63 @@ function renderProduto($row)
                 behavior: 'smooth'
             });
         }
+
+        // === CÓDIGO DO MENU DE ENGRENAGEM (ORIGINAL) ===
+        const adminButton = document.getElementById('admin-menu-button');
+        if (adminButton) {
+            adminButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                const dropdown = document.getElementById('admin-menu-dropdown');
+                dropdown.classList.toggle('show');
+            });
+        }
+
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('#admin-menu-button')) {
+                const dropdowns = document.querySelectorAll('.admin-dropdown-content');
+                dropdowns.forEach(dropdown => {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+        function abrirAlterarSenha() {
+            const width = 400;
+            const height = 500;
+            const left = (screen.width / 2) - (width / 2);
+            const top = (screen.height / 2) - (height / 2);
+            window.open('alterarSenha.php', 'alterarSenha', `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`);
+        }
+
+        const body = document.body;
+        const btnTheme = document.getElementById('toggle-theme');
+        const btnInc = document.getElementById('increase-font');
+        const btnDec = document.getElementById('decrease-font');
+        
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+        }
+
+        btnTheme.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        let currentFont = 100;
+        btnInc.addEventListener('click', () => {
+            if (currentFont < 150) {
+                currentFont += 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
+        btnDec.addEventListener('click', () => {
+            if (currentFont > 70) {
+                currentFont -= 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
     </script>
 </body>
 
