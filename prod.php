@@ -2,13 +2,11 @@
 session_start();
 include("conexao.php");
 
-// Contagem do carrinho
 $total_itens_carrinho = 0;
 if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) {
     $total_itens_carrinho = array_sum($_SESSION['carrinho']);
 }
 
-// Verifica ID
 if (!isset($_GET['id'])) {
     header("Location: inicial.php");
     exit;
@@ -28,7 +26,6 @@ if ($result->num_rows == 0) {
 
 $produto = $result->fetch_assoc();
 
-// Variáveis de controle
 $isAdmin = isset($_SESSION['adm']) && $_SESSION['adm'] == 1;
 $estaLogado = isset($_SESSION['id_usuario']);
 ?>
@@ -56,9 +53,9 @@ $estaLogado = isset($_SESSION['id_usuario']);
             background-color: #121212;
             color: #e0e0e0;
             font-family: 'Segoe UI', Roboto, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* NAVBAR & HEADER */
         .main-header {
             background-color: var(--primary-color);
             padding: 1rem 0;
@@ -143,6 +140,89 @@ $estaLogado = isset($_SESSION['id_usuario']);
 
         .footer-link:hover {
             color: white;
+        }
+
+        .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+
+        .social-icons a:hover {
+            color: #0246adff;
+            transition: color 0.3s ease;
+        }
+
+        /* ==================================================================
+           NOVO CSS DE ACESSIBILIDADE (ADICIONADO)
+           ================================================================== */
+        .accessibility-menu {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid #444;
+        }
+
+        .accessibility-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* MODO CLARO (LIGHT MODE) - SOBRESCRITAS */
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #000;
+        }
+
+        body.light-mode .price-box,
+        body.light-mode .especificacoes-box {
+            background-color: #ffffff;
+            border-color: #ddd;
+            color: #333;
+        }
+
+        body.light-mode .price-box p,
+        body.light-mode .especificacoes-box p,
+        body.light-mode .especificacoes-box h3,
+        body.light-mode .text-white {
+            color: #333 !important;
+        }
+
+        body.light-mode .nav-link-custom {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        body.light-mode .nav-link-custom:hover {
+            color: #000;
+        }
+
+        body.light-mode .text-white-50 {
+            color: #666 !important;
+        }
+
+        body.light-mode i.fas.fa-shopping-cart,
+        body.light-mode i.fas.fa-sign-out-alt {
+            color: #333;
+            /* Ícones escuros no modo claro se header mudar */
         }
     </style>
 </head>
@@ -249,11 +329,56 @@ $estaLogado = isset($_SESSION['id_usuario']);
                 <div class="col-md-4">
                     <p>&copy; 2025 Gygabite Shop</p>
                 </div>
+                <h4>Siga-nos</h4>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/romulo1st/"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
         </div>
     </footer>
 
+    <div class="accessibility-menu">
+        <button id="toggle-theme" class="accessibility-btn">🌓 Tema</button>
+        <button id="increase-font" class="accessibility-btn">A+</button>
+        <button id="decrease-font" class="accessibility-btn">A-</button>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const body = document.body;
+        const btnTheme = document.getElementById('toggle-theme');
+        const btnInc = document.getElementById('increase-font');
+        const btnDec = document.getElementById('decrease-font');
+
+        // 1. Carregar tema salvo
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+        }
+
+        // 2. Alternar Tema
+        btnTheme.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // 3. Tamanho da Fonte
+        let currentFont = 100;
+        btnInc.addEventListener('click', () => {
+            if (currentFont < 150) {
+                currentFont += 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
+        btnDec.addEventListener('click', () => {
+            if (currentFont > 70) {
+                currentFont -= 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
+    </script>
 </body>
 
 </html>
