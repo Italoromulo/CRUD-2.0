@@ -2,7 +2,8 @@
 session_start();
 include_once('conexao.php');
 
-function validaCPF($cpf) {
+function validaCPF($cpf)
+{
     $cpf = preg_replace('/[^0-9]/is', '', $cpf);
     if (strlen($cpf) != 11) return false;
     if (preg_match('/(\d)\1{10}/', $cpf)) return false;
@@ -114,6 +115,7 @@ if (isset($_POST['submit'])) {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .content-wrapper {
@@ -137,7 +139,9 @@ if (isset($_POST['submit'])) {
             text-decoration: none;
         }
 
-        .logo span { color: var(--accent-hover); }
+        .logo span {
+            color: var(--accent-hover);
+        }
 
         .card-custom {
             background-color: rgba(49, 49, 49, 0.5);
@@ -173,7 +177,9 @@ if (isset($_POST['submit'])) {
             border: 1px solid #555;
         }
 
-        ::placeholder { color: #888888ff !important; }
+        ::placeholder {
+            color: #888888ff !important;
+        }
 
         .form-control:focus {
             border-color: var(--primary-color);
@@ -188,11 +194,101 @@ if (isset($_POST['submit'])) {
             color: white;
             margin-top: 3rem;
         }
-        
-        .footer-content h4 { color: var(--accent-hover); font-weight: 700; }
-        .footer-section ul { list-style: none; padding: 0; }
-        .footer-section ul li a, .social-icons a { color: white; text-decoration: none; }
-        .footer-bottom { text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 1rem; color: rgba(255, 255, 255, 0.7); }
+
+        .footer-content h4 {
+            color: var(--accent-hover);
+            font-weight: 700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li a,
+        .social-icons a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+
+        .social-icons a:hover {
+            color: #0246adff;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- CSS DE ACESSIBILIDADE ADICIONADO --- */
+        .accessibility-menu {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid #444;
+        }
+
+        .accessibility-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* MODO CLARO (LIGHT MODE) */
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #000;
+        }
+
+        body.light-mode .card-custom {
+            background-color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .card-header-custom h2 {
+            color: var(--primary-color);
+        }
+
+        body.light-mode .form-label {
+            color: #333;
+        }
+
+        body.light-mode .form-control {
+            background-color: #fff;
+            color: #000 !important;
+            border: 1px solid #ccc;
+        }
+
+        body.light-mode .form-control:focus {
+            background-color: #fff;
+        }
     </style>
 </head>
 
@@ -283,6 +379,12 @@ if (isset($_POST['submit'])) {
                     <h4>Gygabite Shop</h4>
                     <p>A sua paixão por hardware começa aqui.</p>
                 </div>
+                <h4>Siga-nos</h4>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/romulo1st/"><i class="fab fa-instagram"></i></a>
+                </div>
                 <div class="footer-section col-md-4">
                     <h4>Links Rápidos</h4>
                     <ul>
@@ -291,12 +393,7 @@ if (isset($_POST['submit'])) {
                     </ul>
                 </div>
                 <div class="footer-section col-md-4">
-                    <h4>Siga-nos</h4>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
+
                 </div>
             </div>
             <div class="footer-bottom">
@@ -304,6 +401,12 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </footer>
+
+    <div class="accessibility-menu">
+        <button id="toggle-theme" class="accessibility-btn">🌓 Tema</button>
+        <button id="increase-font" class="accessibility-btn">A+</button>
+        <button id="decrease-font" class="accessibility-btn">A-</button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -333,6 +436,39 @@ if (isset($_POST['submit'])) {
 
         document.getElementById('cpf').addEventListener('input', e => e.target.value = aplicarMascaraCPF(e.target.value));
         document.getElementById('telefone').addEventListener('input', e => e.target.value = aplicarMascaraTelefone(e.target.value));
+
+        // --- SCRIPT DE ACESSIBILIDADE (ADICIONADO) ---
+        const body = document.body;
+        const btnTheme = document.getElementById('toggle-theme');
+        const btnInc = document.getElementById('increase-font');
+        const btnDec = document.getElementById('decrease-font');
+
+        // 1. Carregar tema salvo
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+        }
+
+        // 2. Alternar Tema
+        btnTheme.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // 3. Tamanho da Fonte
+        let currentFont = 100;
+        btnInc.addEventListener('click', () => {
+            if (currentFont < 150) {
+                currentFont += 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
+        btnDec.addEventListener('click', () => {
+            if (currentFont > 70) {
+                currentFont -= 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
     </script>
 </body>
+
 </html>
