@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS itens_pedido (
 );
 
 INSERT INTO usuarios (nome, email, senha, login, cpf, telefone, adm) VALUES 
-('Administrador', 'admin@gmail.com', 'admin01', 'admin', '825.071.850-07', '(21) 99999-9999', 1);
+('Administrador', 'admin@gmail.com', '$2y$10$vP1HS0SqseS3Vqx8heT9Mu0n3CKmw5uSXVgHeM8AqzGm1rQXZXSlW', 'admin', '825.071.850-07', '(21) 99999-9999', 1);
 
 
 INSERT INTO produtos (id_prod, nomeprod, categorias, preco, img, especificacoes) VALUES 
