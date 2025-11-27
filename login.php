@@ -4,7 +4,6 @@ include_once('conexao.php');
 
 $erro_login = '';
 
-// Se já estiver logado, redireciona para a página INICIAL
 if (isset($_SESSION['login']) && isset($_SESSION['id_usuario'])) {
     header("Location: inicial.php");
     exit;
@@ -17,7 +16,6 @@ if (isset($_POST['submit'])) {
     if (empty($usuario_login) || empty($senha_digitada)) {
         $erro_login = "Preencha todos os campos.";
     } else {
-        // 1. MUDANÇA AQUI: Adicionei ', adm' no SELECT
         $sql = "SELECT id_usuario, nome, login, senha, adm FROM usuarios WHERE login = ? OR email = ?";
 
         $stmt = $conexao->prepare($sql);
@@ -29,14 +27,11 @@ if (isset($_POST['submit'])) {
             $dados_usuario = $resultado->fetch_assoc();
 
             if (password_verify($senha_digitada, $dados_usuario['senha'])) {
-                // Login Sucesso
+
                 $_SESSION['id_usuario'] = $dados_usuario['id_usuario'];
                 $_SESSION['nome']       = $dados_usuario['nome'];
                 $_SESSION['login']      = $dados_usuario['login'];
-
-                // 2. MUDANÇA AQUI: Salvando o nível de acesso na sessão
                 $_SESSION['adm']        = $dados_usuario['adm'];
-
                 header("Location: inicial.php");
                 exit;
             } else {
@@ -74,6 +69,8 @@ if (isset($_POST['submit'])) {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            /* Adicionado para transição suave do tema */
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .content-wrapper {
@@ -218,6 +215,93 @@ if (isset($_POST['submit'])) {
             color: rgba(255, 255, 255, 0.7);
         }
 
+        .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+
+        .social-icons a:hover {
+            color: #0246adff;
+            transition: color 0.3s ease;
+        }
+
+        /* ==================================================================
+           NOVO CSS DE ACESSIBILIDADE (ADICIONADO)
+           ================================================================== */
+        .accessibility-menu {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid #444;
+        }
+
+        .accessibility-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* MODO CLARO (LIGHT MODE) */
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #000;
+        }
+
+        body.light-mode .card-custom {
+            background-color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .card-header-custom h2 {
+            color: var(--primary-color);
+        }
+
+        body.light-mode .form-label {
+            color: #333;
+        }
+
+        body.light-mode .form-control {
+            background-color: #fff;
+            color: #000 !important;
+            border: 1px solid #ccc;
+        }
+
+        body.light-mode .form-control:focus {
+            background-color: #fff;
+        }
+
+        body.light-mode .input-group-text {
+            background-color: #e9ecef !important;
+            color: #333 !important;
+            border-color: #ccc !important;
+        }
+
+        body.light-mode .text-white-50 {
+            color: #666 !important;
+        }
+
+        body.light-mode .hover-link span {
+            color: var(--primary-color) !important;
+        }
     </style>
 </head>
 
@@ -296,15 +380,60 @@ if (isset($_POST['submit'])) {
                         <li><a href="cadastrouser.php">Criar Conta</a></li>
                     </ul>
                 </div>
-                <div class="footer-section col-md-4">
-                    <h4>Siga-nos</h4>
-                    <div class="social-icons"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div>
+                <div class="col-md-4">
+                    <p>&copy; 2025 Gygabite Shop</p>
+                </div>
+                <h4>Siga-nos</h4>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/romulo1st/"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
             <div class="footer-bottom">&copy; 2025 Gygabite Shop. Todos os direitos reservados.</div>
         </div>
     </footer>
+
+    <div class="accessibility-menu">
+        <button id="toggle-theme" class="accessibility-btn">🌓 Tema</button>
+        <button id="increase-font" class="accessibility-btn">A+</button>
+        <button id="decrease-font" class="accessibility-btn">A-</button>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const body = document.body;
+        const btnTheme = document.getElementById('toggle-theme');
+        const btnInc = document.getElementById('increase-font');
+        const btnDec = document.getElementById('decrease-font');
+
+        // 1. Carregar tema salvo
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+        }
+
+        // 2. Alternar Tema
+        btnTheme.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // 3. Tamanho da Fonte
+        let currentFont = 100;
+        btnInc.addEventListener('click', () => {
+            if (currentFont < 150) {
+                currentFont += 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
+        btnDec.addEventListener('click', () => {
+            if (currentFont > 70) {
+                currentFont -= 10;
+                document.documentElement.style.fontSize = currentFont + '%';
+            }
+        });
+    </script>
 </body>
 
 </html>
