@@ -39,7 +39,6 @@ $faturamento = $res_fat->fetch_assoc()['total'];
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* CSS Específico do Painel para alinhar com o Dark Mode */
         body {
             background-color: #121212;
             color: #e0e0e0;
@@ -63,10 +62,8 @@ $faturamento = $res_fat->fetch_assoc()['total'];
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        /* Footer Styles (Igual ao do site principal) */
         .main-footer {
             background-color: #0d6efd;
-            /* Primary Color */
             color: white;
             padding: 2rem 0;
             margin-top: auto;
@@ -88,7 +85,6 @@ $faturamento = $res_fat->fetch_assoc()['total'];
             margin: 0 10px;
         }
 
-        /* Light Mode Override */
         body.light-mode {
             background-color: #f4f4f4;
             color: #333;
@@ -105,10 +101,14 @@ $faturamento = $res_fat->fetch_assoc()['total'];
             color: #333 !important;
         }
 
-        /* Ajuste do footer no light mode (mantém azul, mas ajusta textos se necessário) */
         body.light-mode .main-footer {
             border-top: 1px solid #ccc;
         }
+
+        p{
+            color: #ffffff;
+        }
+
     </style>
 </head>
 
@@ -132,7 +132,7 @@ $faturamento = $res_fat->fetch_assoc()['total'];
                 <div class="box-painel text-center">
                     <h4 class="text-white mb-3">Faturamento Total</h4>
                     <h2 class="text-success fw-bold">R$ <?php echo number_format($faturamento, 2, ',', '.'); ?></h2>
-                    <p class="text-muted">Valor bruto de vendas</p>
+                    <p class="text-muted" style="color: #ffffff !important;">Valor bruto de vendas</p>
                 </div>
 
                 <div class="box-painel text-center">
@@ -178,7 +178,6 @@ $faturamento = $res_fat->fetch_assoc()['total'];
     </div>
 
     <script>
-        // 1. Script do Gráfico
         const ctx = document.getElementById('graficoVendas').getContext('2d');
         const grafico = new Chart(ctx, {
             type: 'bar',
