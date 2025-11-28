@@ -43,7 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #ffffff;
         }
 
-
         .table tbody tr:nth-child(odd) td {
             background-color: #222 !important;
         }
@@ -55,6 +54,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .table-hover tbody tr:hover td {
             background-color: #505050 !important;
         }
+        
+        .form-control{
+            color: white !important;
+        }
+
+        .form-control:focus {
+            background-color: #333;
+            color: #777;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.35);
+        }
+
+        label {
+            color: #777 !important;
+        }
+
     </style>
 
 </head>
@@ -68,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form action="consulta.php" method="POST">
                     <div class="mt-3 form-floating">
                         <input type="text" class="form-control" id="nomeprod" name="nomeprod"
-                            placeholder="Nome do produto" value="<?php echo htmlspecialchars($nome_consulta); ?>"
+                            placeholder="Nome do produto" style="background-color: #2b2b2b; color: #e0e0e0 !important; border: 1px solid #555;" value="<?php echo htmlspecialchars($nome_consulta); ?>"
                             required>
                         <label for="nomeprod">Nome do Produto:</label>
                     </div>
