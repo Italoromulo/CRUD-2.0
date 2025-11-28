@@ -173,17 +173,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-decoration: none;
         }
 
-        .social-icons a {
-            color: var(--text-color);
-            font-size: 1.5rem;
-            margin: 0 10px;
-        }
-
-        .social-icons a:hover {
-            color: #0246adff;
-            transition: color 0.3s ease;
-        }
-
         .parcela-option {
             display: flex;
             justify-content: space-between;
@@ -267,9 +256,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        /* ==================================================================
-           NOVO CSS DE ACESSIBILIDADE (ADICIONADO)
-           ================================================================== */
         .accessibility-menu {
             position: fixed;
             bottom: 20px;
@@ -301,7 +287,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-color: var(--primary-color);
         }
 
-        /* MODO CLARO (LIGHT MODE) */
         body.light-mode {
             background-color: #f4f4f4;
             color: #000;
@@ -353,7 +338,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #666 !important;
         }
 
-        /* Ajuste do Card Resumo no Light Mode */
         body.light-mode .list-group-item.bg-dark {
             background-color: #fff !important;
             color: #000 !important;
@@ -372,7 +356,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </nav>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block" style="line-height: 1.2;">
-                    <span class="text-white d-block fw-bold">Olá, <?php echo htmlspecialchars($_SESSION['login']); ?></span>
+                    <span class="text-white d-block fw-bold">Olá,
+                        <?php echo htmlspecialchars($_SESSION['login']); ?></span>
                     <small class="text-white-50" style="font-size: 0.75rem;">
                         <?php echo $isAdmin ? 'Administrador' : 'Cliente'; ?>
                     </small>
@@ -390,7 +375,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
                 </div>
                 <h2 class="text-white">Pedido Confirmado!</h2>
-                <p class="lead mb-4 text-white-50">Obrigado, <?php echo htmlspecialchars($_SESSION['login']); ?>. Sua compra foi realizada com sucesso.</p>
+                <p class="lead mb-4 text-white-50">Obrigado, <?php echo htmlspecialchars($_SESSION['login']); ?>. Sua compra
+                    foi realizada com sucesso.</p>
                 <a href="inicial.php" class="btn btn-primary btn-lg">Voltar para a Loja</a>
             </div>
 
@@ -402,17 +388,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <form method="POST" action="checkout.php">
 
                             <div class="row g-3 mb-5">
+                                <div class="col-md-4">
+                                    <label class="form-label text-white">CEP</label>
+                                    <input type="text" name="cep" class="form-control" id="cep" required
+                                        placeholder="00000-000" maxlength="9" oninput="mascaraCEP(this)"
+                                        onblur="pesquisarCep(this.value)">
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label text-white">Cidade</label>
+                                    <input type="text" name="cidade" class="form-control" id="cidade" required>
+                                </div>
                                 <div class="col-12">
                                     <label class="form-label text-white">Endereço Completo</label>
-                                    <input type="text" name="endereco" class="form-control" required placeholder="Rua, Número, Bairro">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-white">Cidade</label>
-                                    <input type="text" name="cidade" class="form-control" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-white">CEP</label>
-                                    <input type="text" name="cep" class="form-control" id="cep" required placeholder="00000-000" maxlength="9" oninput="mascaraCEP(this)">
+                                    <input type="text" name="endereco" class="form-control" id="endereco" required
+                                        placeholder="Rua, Número, Bairro">
                                 </div>
                             </div>
 
@@ -420,19 +409,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="payment-selector">
                                 <label style="flex:1;">
-                                    <input type="radio" name="metodo_pagamento" value="cartao" checked hidden onchange="togglePayment('cartao')">
+                                    <input type="radio" name="metodo_pagamento" value="cartao" checked hidden
+                                        onchange="togglePayment('cartao')">
                                     <div class="payment-btn">
                                         <i class="far fa-credit-card fa-lg mb-2"></i><br>Cartão
                                     </div>
                                 </label>
                                 <label style="flex:1;">
-                                    <input type="radio" name="metodo_pagamento" value="pix" hidden onchange="togglePayment('pix')">
+                                    <input type="radio" name="metodo_pagamento" value="pix" hidden
+                                        onchange="togglePayment('pix')">
                                     <div class="payment-btn">
                                         <i class="fas fa-qrcode fa-lg mb-2"></i><br>Pix
                                     </div>
                                 </label>
                                 <label style="flex:1;">
-                                    <input type="radio" name="metodo_pagamento" value="boleto" hidden onchange="togglePayment('boleto')">
+                                    <input type="radio" name="metodo_pagamento" value="boleto" hidden
+                                        onchange="togglePayment('boleto')">
                                     <div class="payment-btn">
                                         <i class="fas fa-barcode fa-lg mb-2"></i><br>Boleto
                                     </div>
@@ -443,19 +435,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="row g-3">
                                     <div class="col-12">
                                         <label class="form-label text-white">Nome no Cartão</label>
-                                        <input type="text" class="form-control" placeholder="Como impresso no cartão" required>
+                                        <input type="text" class="form-control" placeholder="Como impresso no cartão">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label text-white">Número do Cartão</label>
-                                        <input type="text" class="form-control" id="cartao" placeholder="0000 0000 0000 0000" maxlength="19" oninput="mascaraCartao(this)" required>
+                                        <input type="text" class="form-control" id="cartao"
+                                            placeholder="0000 0000 0000 0000" maxlength="19" oninput="mascaraCartao(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label text-white">Validade</label>
-                                        <input type="text" class="form-control" id="validade" placeholder="MM/AA" maxlength="5" oninput="mascaraData(this)" required>
+                                        <input type="text" class="form-control" id="validade" placeholder="MM/AA"
+                                            maxlength="5" oninput="mascaraData(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label text-white">CVV</label>
-                                        <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4" oninput="mascaraCVV(this)" required>
+                                        <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4"
+                                            oninput="mascaraCVV(this)">
                                     </div>
                                 </div>
 
@@ -526,7 +521,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <ul class="list-group mb-3">
                             <li class="list-group-item d-flex justify-content-between bg-dark text-white border-secondary">
                                 <span>Total (BRL)</span>
-                                <strong id="valor-total-display">R$ <?php echo number_format($total_geral, 2, ',', '.'); ?></strong>
+                                <strong id="valor-total-display">R$
+                                    <?php echo number_format($total_geral, 2, ',', '.'); ?></strong>
                             </li>
                         </ul>
                         <a href="carrinho.php" class="btn btn-outline-light w-100 mt-2">Voltar ao Carrinho</a>
@@ -553,12 +549,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-md-4">
                     <p>&copy; 2025 Gygabite Shop</p>
                 </div>
-                <h4>Siga-nos</h4>
-                <div class="social-icons">
-                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.instagram.com/romulo1st/"><i class="fab fa-instagram"></i></a>
-                </div>
             </div>
         </div>
     </footer>
@@ -571,13 +561,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        async function pesquisarCep(valor) {
+            var cep = valor.replace(/\D/g, '');
+            if (cep != "") {
+                var validacep = /^[0-9]{8}$/;
+                if (validacep.test(cep)) {
+                    document.getElementById('endereco').value = "...";
+                    document.getElementById('cidade').value = "...";
+
+                    try {
+                        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                        const data = await response.json();
+                        if (!("erro" in data)) {
+                            document.getElementById('endereco').value = data.logradouro + " - " + data.bairro;
+                            document.getElementById('cidade').value = data.localidade + "/" + data.uf;
+                        } else {
+                            alert("CEP não encontrado.");
+                            document.getElementById('endereco').value = "";
+                            document.getElementById('cidade').value = "";
+                        }
+                    } catch (e) {
+                        alert("Erro ao buscar CEP.");
+                    }
+                } else {
+                    alert("Formato de CEP inválido.");
+                }
+            }
+        }
+
         function togglePayment(method) {
             document.getElementById('area-cartao').classList.remove('active');
             document.getElementById('area-pix').classList.remove('active');
             document.getElementById('area-boleto').classList.remove('active');
             document.getElementById('area-' + method).classList.add('active');
 
-            // Só mexe no total se não for cartão (lógica original)
             if (method !== 'cartao') {
                 const totalOriginal = <?php echo $total_geral; ?>;
                 const valorFormatado = new Intl.NumberFormat('pt-BR', {
@@ -625,24 +642,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             i.value = v;
         }
 
-        // --- SCRIPT DE ACESSIBILIDADE (ADICIONADO) ---
+        // --- SCRIPT DE ACESSIBILIDADE ---
         const body = document.body;
         const btnTheme = document.getElementById('toggle-theme');
         const btnInc = document.getElementById('increase-font');
         const btnDec = document.getElementById('decrease-font');
 
-        // 1. Carregar tema salvo
         if (localStorage.getItem('theme') === 'light') {
             body.classList.add('light-mode');
         }
 
-        // 2. Alternar Tema
         btnTheme.addEventListener('click', () => {
             body.classList.toggle('light-mode');
             localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
         });
 
-        // 3. Tamanho da Fonte
         let currentFont = 100;
         btnInc.addEventListener('click', () => {
             if (currentFont < 150) {
