@@ -76,7 +76,6 @@ function renderProduto($row)
             color: var(--text-color);
             scroll-behavior: smooth;
             transition: background-color 0.3s, color 0.3s;
-            /* Transição suave para o tema */
         }
 
         .main-header {
@@ -128,7 +127,6 @@ function renderProduto($row)
             width: 100%;
         }
 
-        /* Ícones do Header (Carrinho e User) */
         .header-icons {
             display: flex;
             align-items: center;
@@ -164,7 +162,6 @@ function renderProduto($row)
             border-bottom: 1px solid #444;
         }
 
-        /* --- CARROSSEL CSS --- */
         .product-section {
             padding: 4rem 0 2rem 0;
             width: 100%;
@@ -309,7 +306,6 @@ function renderProduto($row)
             transition: color 0.3s ease;
         }
 
-        /* --- ADMIN MENU ORIGINAL --- */
         .admin-menu-container {
             position: relative;
             display: inline-block;
@@ -350,10 +346,6 @@ function renderProduto($row)
             transform: translateY(0);
         }
 
-        /* ==================================================================
-           NOVO CSS DE ACESSIBILIDADE (Adicionado sem mexer no original)
-           ================================================================== */
-        /* Menu Flutuante */
         .accessibility-menu {
             position: fixed;
             bottom: 20px;
@@ -385,7 +377,6 @@ function renderProduto($row)
             border-color: var(--primary-color);
         }
 
-        /* Sobrescrita para MODO CLARO (Light Mode) */
         body.light-mode {
             background-color: #f4f4f4;
             color: #000;
@@ -508,6 +499,9 @@ function renderProduto($row)
                                 </a>
                                 <a href="consul_todos.php" class="btn btn-secondary btn-lg px-4">
                                     <i class="fas fa-list"></i> Ver Tabela Completa
+                                </a>
+                                <a href="painel.php" class="btn btn-secondary btn-lg px-4">
+                                    <i class="fas fa-list"></i> Gráfico
                                 </a>
                             </div>
                         </div>
