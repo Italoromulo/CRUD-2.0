@@ -278,7 +278,6 @@ function renderProduto($row)
             color: inherit;
         }
 
-        /* Footer */
         .main-footer {
             background-color: var(--primary-color);
             color: white;
@@ -304,46 +303,6 @@ function renderProduto($row)
         .social-icons a:hover {
             color: #0246adff;
             transition: color 0.3s ease;
-        }
-
-        .admin-menu-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .admin-dropdown-content {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.4s ease, visibility 0.3s;
-            position: absolute;
-            background-color: #1a1a1aff;
-            min-width: 180px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.5);
-            z-index: 1001;
-            right: 0;
-            top: 30px;
-            border-radius: 5px;
-        }
-
-        .admin-dropdown-content a {
-            color: #ff7300;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
-
-        .admin-dropdown-content a:hover {
-            background-color: #181818ff;
-            border-radius: 5px;
-        }
-
-        .admin-dropdown-content.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
         }
 
         .accessibility-menu {
@@ -403,15 +362,6 @@ function renderProduto($row)
         body.light-mode .nav-link-custom:hover {
             color: #000;
         }
-
-        body.light-mode .admin-dropdown-content {
-            background-color: #fff;
-            border: 1px solid #ccc;
-        }
-
-        body.light-mode .admin-dropdown-content a:hover {
-            background-color: #eee;
-        }
     </style>
 </head>
 
@@ -449,25 +399,6 @@ function renderProduto($row)
                     <a href="logout.php" class="text-white fs-5 ms-2" title="Sair">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
-
-                    <div class="admin-menu-container">
-                        <a href="#" id="admin-menu-button" aria-label="Configurações" title="Configurações">
-                            <i class="fas fa-cog"></i>
-                        </a>
-                        <div id="admin-menu-dropdown" class="admin-dropdown-content">
-                            <?php if ($isAdmin) : ?>
-                                <a href="sistema.php">Gerenciar Cadastros</a>
-                                <a href="log.php">Tela log</a>
-                                <a href="painel.php">Dashboard (Relatório)</a>
-                            <?php endif; ?>
-
-                            <a href="telabd.php">Modelo BD</a>
-
-                            <?php if (!$isAdmin) : ?>
-                                <a onclick="abrirAlterarSenha()" style="cursor:pointer;">Alterar Senha</a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
 
                 <?php else: ?>
                     <a href="login.php" class="btn btn-outline-light btn-sm fw-bold ms-3">
@@ -601,7 +532,7 @@ function renderProduto($row)
                     <div class="carrossel-wrapper">
                         <div class="horizontal" id="carrossel-geral">
                             <?php
-                            $sql = "SELECT * FROM produtos ORDER BY id_prod DESC LIMIT 15";
+                            $sql = "SELECT * FROM produtos ORDER BY id_prod DESC LIMIT 20";
                             $result = $conexao->query($sql);
                             if ($result && $result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) renderProduto($row);
@@ -674,27 +605,6 @@ function renderProduto($row)
             });
         }
 
-        // === CÓDIGO DO MENU DE ENGRENAGEM (ORIGINAL) ===
-        const adminButton = document.getElementById('admin-menu-button');
-        if (adminButton) {
-            adminButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                const dropdown = document.getElementById('admin-menu-dropdown');
-                dropdown.classList.toggle('show');
-            });
-        }
-
-        window.addEventListener('click', function(event) {
-            if (!event.target.closest('#admin-menu-button')) {
-                const dropdowns = document.querySelectorAll('.admin-dropdown-content');
-                dropdowns.forEach(dropdown => {
-                    if (dropdown.classList.contains('show')) {
-                        dropdown.classList.remove('show');
-                    }
-                });
-            }
-        });
-
         function abrirAlterarSenha() {
             const width = 400;
             const height = 500;
@@ -707,7 +617,7 @@ function renderProduto($row)
         const btnTheme = document.getElementById('toggle-theme');
         const btnInc = document.getElementById('increase-font');
         const btnDec = document.getElementById('decrease-font');
-        
+
         if (localStorage.getItem('theme') === 'light') {
             body.classList.add('light-mode');
         }
