@@ -2,13 +2,11 @@
 session_start();
 include("conexao.php");
 
-// Proteção: Só admin
 if (!isset($_SESSION['adm']) || $_SESSION['adm'] != 1) {
     header("Location: inicial.php");
     exit;
 }
 
-// DADOS PARA O GRÁFICO (Top 5 Produtos)
 $sql_grafico = "SELECT p.nomeprod, SUM(i.quantidade) as total 
                 FROM itens_pedido i 
                 JOIN produtos p ON i.id_prod = p.id_prod 
@@ -19,11 +17,10 @@ $res = $conexao->query($sql_grafico);
 $labels = [];
 $data = [];
 while ($row = $res->fetch_assoc()) {
-    $labels[] = $row['nomeprod']; // Nome do produto
-    $data[] = $row['total'];      // Quantidade vendida
+    $labels[] = $row['nomeprod']; 
+    $data[] = $row['total'];
 }
 
-// DADOS DE FATURAMENTO
 $sql_fat = "SELECT SUM(valor_total) as total FROM pedidos";
 $res_fat = $conexao->query($sql_fat);
 $faturamento = $res_fat->fetch_assoc()['total'];
@@ -222,11 +219,9 @@ $faturamento = $res_fat->fetch_assoc()['total'];
             }
         });
 
-        // 2. Script do Dark Mode
         const body = document.body;
         const btnTheme = document.getElementById('toggle-theme');
 
-        // Função para atualizar cores do gráfico quando muda o tema
         function updateChartColors(isLight) {
             const color = isLight ? '#333' : '#ccc';
             const gridColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
